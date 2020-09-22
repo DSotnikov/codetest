@@ -12,27 +12,14 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  api_audit_job:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: Audit OpenAPI files
     steps:
-    - name: 42Crunch REST API Static Security Testing
-      # You may pin to the exact commit or the version.
-      # uses: 42Crunch/api-security-audit-action@19c963c5dde148ea85364adccd27fff64753e5a6
-         uses: 42Crunch/api-security-audit-action@v1
-        with:
-          # The API token to access 42Crunch Platform.
-          api-token: 
-          # A name for the API collection
-          collection-name: # default is github
-          # Minimum score for OpenAPI files.
-          min-score: # default is 75
-          # 
-          github-token: # default is ${{ github.token }}
-          # Upload results to Github Code Scanning
-          upload-to-code-scanning: 
-          # Do not fail the action even if the faiures were detected in the API contract
-          ignore-failures: 
+    - uses: actions/checkout@v2
+    - uses: 42Crunch/api-security-audit-action@v1
+      with:
+        # Please create free account at https://platform.42crunch.com/register
+        # Follow these steps to configure API_TOKEN https://docs.42crunch.com/latest/content/tasks/integrate_github_actions.htm
+        api-token: ${{ secrets.API_TOKEN }}
+        min-score: 85
