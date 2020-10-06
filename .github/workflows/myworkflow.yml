@@ -12,14 +12,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  api_audit_job:
+  test-apis:
     runs-on: ubuntu-latest
-    name: Audit OpenAPI files
     steps:
     - uses: actions/checkout@v2
-    - uses: 42Crunch/api-security-audit-action@v1
+
+    - name: 42Crunch REST API Static Security Testing
+      uses: 42Crunch/api-security-audit-action@v1
       with:
         # Please create free account at https://platform.42crunch.com/register
         # Follow these steps to configure API_TOKEN https://docs.42crunch.com/latest/content/tasks/integrate_github_actions.htm
         api-token: ${{ secrets.API_TOKEN }}
-        min-score: 85
+        # Fail if any OpenAPI file scores lower than 75
+        min-score: 75
+        # Upload results to Github code scanning
+        upload-to-code-scanning: true
